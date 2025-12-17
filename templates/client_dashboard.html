@@ -1,0 +1,56 @@
+{% extends "base_public.html" %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div>
+    <h2 class="mb-0">Painel da Distribuidora</h2>
+    <div class="text-muted small">{{ session.get("client_email") }}</div>
+  </div>
+  <div class="d-flex gap-2">
+    <a class="btn btn-outline-dark" href="{{ url_for('public_index') }}">Ver site</a>
+    <a class="btn btn-dark" href="{{ url_for('client_logout') }}">Sair</a>
+  </div>
+</div>
+
+{% if not company %}
+  <div class="alert alert-warning">
+    Você ainda não cadastrou sua empresa. Clique abaixo para cadastrar.
+  </div>
+  <a class="btn btn-dark" href="{{ url_for('client_company_edit') }}">Cadastrar minha empresa</a>
+{% else %}
+  {<a class="btn btn-dark" href="{{ url_for('client_plan') }}">Selecionar plano</a>}
+    <div class="alert alert-danger">
+      <b>Sua empresa ainda NÃO está visível no site público.</b><br>
+    Você já pode escolher um plano e, após o pagamento ser aprovado, sua empresa ficará ativa automaticamente.
+    <div class="mt-2">
+    <a class="btn btn-dark btn-sm" href="{{ url_for('client_plan') }}">Selecionar / trocar plano</a>
+    </div>
+
+
+      Para aparecer para todos os clientes e começar a receber contatos, <b>assine um plano</b>.
+      <div class="mt-2 small text-muted">
+        (Por enquanto o plano é ativado manualmente para teste. Depois colocaremos pagamento automático.)
+      </div>
+    </div>
+  {% else %}
+    <div class="alert alert-success">
+      ✅ Sua empresa está <b>ativa</b> e visível para clientes no site público.
+    </div>
+  {% endif %}
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4 class="mb-1">{{ company["name"] }}</h4>
+      <div class="text-muted small mb-3">{{ company["city"] or "" }} {{ company["state"] or "" }}</div>
+
+      <p class="mb-2"><b>Produtos:</b><br>{{ company["products"] }}</p>
+
+      <div class="d-flex gap-2">
+        <a class="btn btn-dark" href="{{ url_for('client_company_edit') }}">Editar dados</a>
+        {% if company["plan_status"] == "active" %}
+          <a class="btn btn-outline-success" target="_blank" href="{{ url_for('public_company', company_id=company['id']) }}">Ver minha página</a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

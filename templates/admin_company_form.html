@@ -1,0 +1,75 @@
+{% extends "base_admin.html" %}
+{% block content %}
+<div class="card shadow-sm">
+  <div class="card-body p-4">
+    <h2 class="mb-1">{{ 'Nova empresa' if mode=='new' else 'Editar empresa' }}</h2>
+    <p class="text-muted">Cadastre os dados como se fosse um cliente (teste).</p>
+
+    <form method="post" class="row g-3">
+      <div class="col-md-7">
+        <label class="form-label">Nome da empresa *</label>
+        <input class="form-control" name="name" value="{{ c['name'] if c else '' }}" required>
+      </div>
+      <div class="col-md-5">
+        <label class="form-label">Plano (placeholder)</label>
+        <select class="form-select" name="plan_status">
+          <option value="inactive" {% if c and c['plan_status']=='inactive' %}selected{% endif %}>inactive</option>
+          <option value="active" {% if c and c['plan_status']=='active' %}selected{% endif %}>active</option>
+        </select>
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Produtos que vende *</label>
+        <textarea class="form-control" name="products" rows="3" required
+          placeholder="Ex: bebidas, arroz, óleo, material de limpeza...">{{ c['products'] if c else '' }}</textarea>
+        <div class="text-muted small">Dica: separe por vírgulas (ajuda na busca).</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Nome do contato</label>
+        <input class="form-control" name="contact_name" value="{{ c['contact_name'] if c else '' }}">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">Telefone</label>
+        <input class="form-control" name="phone" value="{{ c['phone'] if c else '' }}">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">WhatsApp (somente números)</label>
+        <input class="form-control" name="whatsapp" value="{{ c['whatsapp'] if c else '' }}" placeholder="65999999999">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Email</label>
+        <input class="form-control" name="email" value="{{ c['email'] if c else '' }}">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">CEP</label>
+        <input class="form-control" name="cep" value="{{ c['cep'] if c else '' }}">
+      </div>
+      <div class="col-md-3">
+        <label class="form-label">UF</label>
+        <input class="form-control" name="state" value="{{ c['state'] if c else '' }}" placeholder="MT">
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label">Cidade</label>
+        <input class="form-control" name="city" value="{{ c['city'] if c else '' }}" placeholder="Cáceres">
+      </div>
+      <div class="col-md-6">
+        <label class="form-label">Endereço</label>
+        <input class="form-control" name="address" value="{{ c['address'] if c else '' }}">
+      </div>
+
+      <div class="col-12">
+        <label class="form-label">Observações</label>
+        <textarea class="form-control" name="notes" rows="2">{{ c['notes'] if c else '' }}</textarea>
+      </div>
+
+      <div class="col-12 d-flex gap-2">
+        <button class="btn btn-dark" type="submit">Salvar</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('admin_dashboard') }}">Cancelar</a>
+      </div>
+    </form>
+  </div>
+</div>
+{% endblock %}

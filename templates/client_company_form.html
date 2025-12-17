@@ -1,0 +1,94 @@
+{% extends "base_public.html" %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-9">
+    <div class="card shadow-sm">
+      <div class="card-body p-4">
+        <div class="d-flex justify-content-between align-items-start">
+          <div>
+            <h3 class="mb-1">Minha Empresa</h3>
+            <p class="text-muted mb-0">Preencha bem os produtos. Isso é o que faz você aparecer nas buscas.</p>
+          </div>
+          <a class="btn btn-outline-dark" href="{{ url_for('client_dashboard') }}">Voltar</a>
+        </div>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, msg in messages %}
+              <div class="alert {{ 'alert-danger' if category == 'error' else 'alert-success' }} mt-3">{{ msg }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        <form method="post" class="row g-3 mt-1">
+          <div class="col-md-8">
+            <label class="form-label">Nome da empresa *</label>
+            <input class="form-control" name="name" value="{{ company['name'] if company else '' }}" required>
+          </div>
+
+          <div class="col-md-4">
+            <label class="form-label">Plano</label>
+            <select class="form-select" name="plan_status" disabled>
+              <option value="inactive" {% if company and company['plan_status']=='inactive' %}selected{% endif %}>inactive</option>
+              <option value="active" {% if company and company['plan_status']=='active' %}selected{% endif %}>active</option>
+            </select>
+            <div class="text-muted small mt-1">Somente admin ativa durante o teste.</div>
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Produtos que vende *</label>
+            <textarea class="form-control" name="products" rows="3" required
+              placeholder="Ex: bebidas, arroz, óleo, açúcar, material de limpeza...">{{ company['products'] if company else '' }}</textarea>
+            <div class="text-muted small mt-1">Dica: separe por vírgulas.</div>
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Nome do contato</label>
+            <input class="form-control" name="contact_name" value="{{ company['contact_name'] if company else '' }}">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">Telefone</label>
+            <input class="form-control" name="phone" value="{{ company['phone'] if company else '' }}">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">WhatsApp (somente números)</label>
+            <input class="form-control" name="whatsapp" value="{{ company['whatsapp'] if company else '' }}" placeholder="65999999999">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Email</label>
+            <input class="form-control" name="email" value="{{ company['email'] if company else '' }}">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">CEP</label>
+            <input class="form-control" name="cep" value="{{ company['cep'] if company else '' }}">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">UF</label>
+            <input class="form-control" name="state" value="{{ company['state'] if company else '' }}" placeholder="MT">
+          </div>
+
+          <div class="col-md-6">
+            <label class="form-label">Cidade</label>
+            <input class="form-control" name="city" value="{{ company['city'] if company else '' }}" placeholder="Cáceres">
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Endereço</label>
+            <input class="form-control" name="address" value="{{ company['address'] if company else '' }}">
+          </div>
+
+          <div class="col-12">
+            <label class="form-label">Observações</label>
+            <textarea class="form-control" name="notes" rows="2">{{ company['notes'] if company else '' }}</textarea>
+          </div>
+
+          <div class="col-12 d-flex gap-2">
+            <button class="btn btn-dark" type="submit">Salvar</button>
+            <a class="btn btn-outline-secondary" href="{{ url_for('client_dashboard') }}">Cancelar</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

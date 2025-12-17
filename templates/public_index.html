@@ -1,0 +1,54 @@
+{% extends "base_public.html" %}
+{% block content %}
+<div class="row g-3 align-items-end">
+  <div class="col-lg-6">
+    <h1 class="h3 mb-1">Encontre distribuidoras por produto</h1>
+    <p class="text-muted mb-0">Digite um produto (ex: “arroz”, “bebidas”, “peças”) e ache contatos.</p>
+  </div>
+
+  <div class="col-lg-6">
+    <form class="row g-2" method="get" action="{{ url_for('public_index') }}">
+      <div class="col-12 col-md-5">
+        <input class="form-control" name="q" placeholder="Produto ou empresa..." value="{{ q or '' }}">
+      </div>
+      <div class="col-6 col-md-4">
+        <input class="form-control" name="city" placeholder="Cidade..." value="{{ city or '' }}">
+      </div>
+      <div class="col-6 col-md-2">
+        <input class="form-control" name="state" placeholder="UF" value="{{ state or '' }}">
+      </div>
+      <div class="col-12 col-md-1 d-grid">
+        <button class="btn btn-dark">🔍</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<hr class="my-4">
+
+{% if not rows %}
+  <div class="alert alert-warning">Nenhuma distribuidora ativa encontrada.</div>
+{% else %}
+  <div class="row g-3">
+    {% for r in rows %}
+    <div class="col-lg-4">
+      <div class="card h-100 shadow-sm">
+        <div class="card-body">
+          <h5 class="card-title mb-1">{{ r["name"] }}</h5>
+          <div class="text-muted small mb-2">{{ (r["city"] or "") }} {{ (r["state"] or "") }}</div>
+          <div class="small"><b>Produtos:</b> {{ r["products"] }}</div>
+        </div>
+        <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+          <a class="btn btn-outline-dark btn-sm" href="{{ url_for('public_company', company_id=r['id']) }}">Ver detalhes</a>
+          {% if r["whatsapp"] %}
+            <a class="btn btn-success btn-sm" target="_blank" href="{{ url_for('go_whatsapp', company_id=r['id']) }}">
+              WhatsApp
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endif %}
+{% endblock %}
